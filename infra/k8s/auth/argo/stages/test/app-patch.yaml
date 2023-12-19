@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: auth
+  annotations:
+    kargo.akuity.io/authorized-stage: auth:test
+spec:
+  destination:
+    namespace: test
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/agumbe-ai/kargo-demo-manifests.git
+    targetRevision: test
+    path: infra/k8s/auth/stages/test
+  project: kargo-demo
+  syncPolicy:
+    automated: {}

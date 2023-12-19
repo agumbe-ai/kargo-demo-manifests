@@ -14,7 +14,13 @@ We have 3 microservices
 We have an ingress.
 ```
 export $ARGOCD_PROJ = "kargo-demo"
+```
 
+
+For the repository at https://github.com/agumbe-ai/kargo-demo-manifests.git
+
+Then update the $REPO_URL to your forked repository. 
+```
 $REPO_URL = https://github.com/agumbe-ai/kargo-demo-manifests.git
 ```
 
@@ -36,16 +42,25 @@ $REPO_URL = https://github.com/agumbe-ai/kargo-demo-manifests.git
    ```
    argocd repo add https://github.com/agumbe-ai/kargo-demo-manifests.git --project kargo-demo
    ```
-4. Create branch in the repo for each overlay (manual step)
+4. Create branch in the repo for each overlay (manual step. should be automated using an operator)
    
 5. Create Argo applications
    ```
-   # Get argocd credentials
+   # 1. Get argocd credentials
+   
    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo;
    
-   # port forward argo cd
+   # 2. port forward argo cd
+   
    kubectl port-forward svc/argocd-server -n argocd 8080:443
    
-   # login
-   argocd login localhost:8080 --username admin --grpc-web-root-path /kustomize build infra/k8s/auth/argo/overlays/test | argocd app create --file -
+   # 3. login
+   
+   argocd login localhost:8080 --username admin --grpc-web-root-path /
+   
+   # 4. create argo app
+
+   kustomize build infra/k8s/auth/argo/overlays/test | argocd app create --file -
    ```
+
+   

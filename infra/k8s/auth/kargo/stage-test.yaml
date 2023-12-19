@@ -1,0 +1,19 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: test
+  namespace: test
+spec:
+  subscriptions:
+    warehouse: kargo-demo
+  promotionMechanisms:
+    gitRepoUpdates:
+    - repoURL: https://github.com/agumbe-ai/kargo-demo-manifests.git
+      writeBranch: test
+      kustomize:
+        images:
+        - image: nginx
+          path: infra/k8s/auth/stages/test
+    argoCDAppUpdates:
+    - appName: auth
+      appNamespace: test
